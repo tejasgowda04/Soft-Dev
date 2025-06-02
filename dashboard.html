@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Course Dashboard | SOFT.dev</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="dashboard.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .nav-link::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 2px;
+            background: #4f46e5;
+            transition: width .3s;
+            margin-top: 2px;
+        }
+        
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+        
+        .module-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-laptop-code text-indigo-600 text-2xl mr-2"></i>
+                        <span class="text-xl font-bold text-gray-900">SOFT.<span class="text-indigo-600">dev</span></span>
+                    </div>
+                    <div class="hidden md:block ml-10">
+                        <div class="flex space-x-8">
+                            <a href="index.html" class="nav-link text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                            <a href="index.html#courses" class="nav-link text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">Courses</a>
+                            <a href="#" class="nav-link text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">Dashboard</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="hidden md:block">
+                    <div class="flex items-center space-x-4">
+                        <div class="relative">
+                            <button class="text-gray-600 hover:text-gray-900 focus:outline-none">
+                                <i class="fas fa-bell text-xl"></i>
+                                <span class="absolute top-0 right-0 h-2 w-2 rounded-full bg-red-500"></span>
+                            </button>
+                        </div>
+                        <div class="flex items-center">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" class="w-8 h-8 rounded-full mr-2">
+                            <span class="text-sm font-medium">Rahul S.</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-gray-500 hover:text-gray-900 inline-flex items-center justify-center p-2 rounded-md focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div class="hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="index.html" class="nav-link text-gray-700 hover:text-indigo-600 block px-3 py-2 rounded-md text-base font-medium">Home</a>
+                <a href="index.html#courses" class="nav-link text-gray-700 hover:text-indigo-600 block px-3 py-2 rounded-md text-base font-medium">Courses</a>
+                <a href="#" class="nav-link text-indigo-600 block px-3 py-2 rounded-md text-base font-medium">Dashboard</a>
+                <div class="pt-4 border-t border-gray-200">
+                    <div class="flex items-center px-3 py-2">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" class="w-8 h-8 rounded-full mr-2">
+                        <span class="text-base font-medium">Rahul S.</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Dashboard Content -->
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div class="flex flex-col lg:flex-row gap-8">
+            <!-- Left Sidebar - User Profile -->
+            <div class="lg:w-1/4">
+                <div class="bg-white rounded-xl shadow-md overflow-hidden">
+                    <div class="bg-indigo-600 h-24"></div>
+                    <div class="px-6 pb-6 relative">
+                        <div class="flex justify-center -mt-12 mb-4">
+                            <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" class="w-24 h-24 rounded-full border-4 border-white">
+                        </div>
+                        <div class="text-center mb-6">
+                            <h3 class="text-xl font-bold text-gray-900">Rahul Sharma</h3>
+                            <p class="text-gray-600">Full Stack Developer</p>
+                        </div>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-500 mb-2">PROGRESS</h4>
+                                <div class="flex items-center justify-center">
+                                    <div class="relative w-24 h-24">
+                                        <svg class="w-full h-full" viewBox="0 0 36 36">
+                                            <path
+                                                d="M18 2.0845
+                                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                                                fill="none"
+                                                stroke="#E5E7EB"
+                                                stroke-width="3"
+                                            />
+                                            <path
+                                                d="M18 2.0845
+                                                    a 15.9155 15.9155 0 0 1 0 31.831
+                                                    a 15.9155 15.9155 0 0 1 0 -31.831"
+                                                fill="none"
+                                                stroke="#4F46E5"
+                                                stroke-width="3"
+                                                stroke-dasharray="65, 100"
+                                            />
+                                        </svg>
+                                        <div class="absolute inset-0 flex items-center justify-center">
+                                            <span class="text-xl font-bold text-gray-900">65%</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-500 mb-2">COURSE STATS</h4>
+                                <div class="space-y-3">
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-gray-700">Modules Completed</span>
+                                        <span class="font-medium">1/3</span>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-gray-700">Hours Watched</span>
+                                        <span class="font-medium">8.5h</span>
+                                    </div>
+                                    <div class="flex justify-between items-center">
+                                        <span class="text-gray-700">Last Activity</span>
+                                        <span class="font-medium">2h ago</span>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div>
+                                <h4 class="text-sm font-medium text-gray-500 mb-2">ACCOUNT</h4>
+                                <div class="space-y-2">
+                                    <a href="#" class="flex items-center text-gray-700 hover:text-indigo-600">
+                                        <i class="fas fa-user mr-3 w-5"></i>
+                                        <span>Profile Settings</span>
+                                    </a>
+                                    <a href="#" class="flex items-center text-gray-700 hover:text-indigo-600">
+                                        <i class="fas fa-lock mr-3 w-5"></i>
+                                        <span>Change Password</span>
+                                    </a>
+                                    <a href="#" class="flex items-center text-gray-700 hover:text-indigo-600">
+                                        <i class="fas fa-sign-out-alt mr-3 w-5"></i>
+                                        <span>Logout</span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Main Content - Course Modules -->
+            <div class="lg:w-3/4">
+                <div class="bg-white rounded-xl shadow-md overflow-hidden mb-8">
+                    <div class="p-6">
+                        <div class="flex flex-col md:flex-row md:items-center justify-between mb-6">
+                            <div>
+                                <h2 class="text-2xl font-bold text-gray-900">Full Stack Web Development</h2>
+                                <p class="text-gray-600">Master MERN stack and build complete web applications with React and Node.js</p>
+                            </div>
+                            <div class="mt-4 md:mt-0">
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                                    <i class="fas fa-check-circle mr-1"></i>
+                                    Enrolled
+                                </span>
+                            </div>
+                        </div>
+                        
+                        <div class="w-full bg-gray-200 rounded-full h-2.5 mb-6">
+                            <div class="bg-indigo-600 h-2.5 rounded-full" style="width: 65%"></div>
+                        </div>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                            <div class="bg-indigo-50 p-4 rounded-lg">
+                                <div class="text-indigo-600 mb-2">
+                                    <i class="fas fa-book-open"></i>
+                                </div>
+                                <h3 class="font-bold text-gray-900">Modules</h3>
+                                <p class="text-gray-600">1/3 Completed</p>
+                            </div>
+                            <div class="bg-indigo-50 p-4 rounded-lg">
+                                <div class="text-indigo-600 mb-2">
+                                    <i class="far fa-clock"></i>
+                                </div>
+                                <h3 class="font-bold text-gray-900">Duration</h3>
+                                <p class="text-gray-600">80 Hours Total</p>
+                            </div>
+                            <div class="bg-indigo-50 p-4 rounded-lg">
+                                <div class="text-indigo-600 mb-2">
+                                    <i class="fas fa-certificate"></i>
+                                </div>
+                                <h3 class="font-bold text-gray-900">Certificate</h3>
+                                <p class="text-gray-600">Available on Completion</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Course Modules -->
+                <div class="mb-8">
+                    <h3 class="text-xl font-bold text-gray-900 mb-6">Course Modules</h3>
+                    
+                    <div class="space-y-4">
+                        <!-- Module 1 -->
+                        <div class="module-card bg-white rounded-xl shadow-md border border-gray-100 transition duration-300 overflow-hidden">
+                            <div class="flex items-center justify-between p-6">
+                                <div class="flex items-center">
+                                    <div class="bg-indigo-100 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                                        <i class="fas fa-play text-indigo-600"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-gray-900">Module 1: Frontend with React</h4>
+                                        <p class="text-gray-600 text-sm">5 Lessons • 25 Hours</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                                        Completed
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Module 2 -->
+                        <div class="module-card bg-white rounded-xl shadow-md border border-gray-100 transition duration-300 overflow-hidden">
+                            <div class="flex items-center justify-between p-6">
+                                <div class="flex items-center">
+                                    <div class="bg-indigo-100 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                                        <i class="fas fa-play text-indigo-600"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-gray-900">Module 2: Backend with Node.js</h4>
+                                        <p class="text-gray-600 text-sm">6 Lessons • 30 Hours</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-yellow-100 text-yellow-800">
+                                        In Progress
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Module 3 -->
+                        <div class="module-card bg-white rounded-xl shadow-md border border-gray-100 transition duration-300 overflow-hidden">
+                            <div class="flex items-center justify-between p-6">
+                                <div class="flex items-center">
+                                    <div class="bg-indigo-100 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                                        <i class="fas fa-play text-indigo-600"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="font-bold text-gray-900">Module 3: Database Integration</h4>
+                                        <p class="text-gray-600 text-sm">4 Lessons • 25 Hours</p>
+                                    </div>
+                                </div>
+                                <div>
+                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-gray-100 text-gray-800">
+                                        Not Started
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Recommended Courses -->
+                <div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-6">Recommended Courses</h3>
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Course 1 -->
+                        <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 transition duration-300 hover:shadow-lg">
+                            <div class="relative">
+                                <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                                     alt="AI & Machine Learning" class="w-full h-40 object-cover">
+                            </div>
+                            <div class="p-4">
+                                <h4 class="font-bold text-gray-900 mb-2">AI & Machine Learning</h4>
+                                <div class="flex items-center text-yellow-400 mb-2 text-sm">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star-half-alt"></i>
+                                    <span class="text-gray-500 ml-2">4.8</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-indigo-600 font-bold">₹6,999</span>
+                                    <button class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+                                        View Course
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Course 2 -->
+                        <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 transition duration-300 hover:shadow-lg">
+                            <div class="relative">
+                                <img src="https://images.unsplash.com/photo-1617791160536-598cf32026fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1364&q=80" 
+                                     alt="Data Science" class="w-full h-40 object-cover">
+                            </div>
+                            <div class="p-4">
+                                <h4 class="font-bold text-gray-900 mb-2">Data Science & Analytics</h4>
+                                <div class="flex items-center text-yellow-400 mb-2 text-sm">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <span class="text-gray-500 ml-2">5.0</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-indigo-600 font-bold">₹9,999</span>
+                                    <button class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+                                        View Course
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Course 3 -->
+                        <div class="bg-white rounded-xl shadow-md overflow-hidden border border-gray-100 transition duration-300 hover:shadow-lg">
+                            <div class="relative">
+                                <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                                     alt="Mobile Development" class="w-full h-40 object-cover">
+                            </div>
+                            <div class="p-4">
+                                <h4 class="font-bold text-gray-900 mb-2">Mobile App Development</h4>
+                                <div class="flex items-center text-yellow-400 mb-2 text-sm">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <span class="text-gray-500 ml-2">4.2</span>
+                                </div>
+                                <div class="flex justify-between items-center">
+                                    <span class="text-indigo-600 font-bold">₹7,499</span>
+                                    <button class="text-indigo-600 hover:text-indigo-800 text-sm font-medium">
+                                        View Course
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <h3 class="text-lg font-bold mb-4 flex items-center">
+                        <i class="fas fa-laptop-code text-indigo-400 text-2xl mr-2"></i>
+                        <span>SOFT.<span class="text-indigo-400">dev</span></span>
+                    </h3>
+                    <p class="text-gray-400">Advancing careers through cutting-edge tech education. Learn from industry experts and accelerate your growth.</p>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-md font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="index.html" class="text-gray-400 hover:text-white">Home</a></li>
+                        <li><a href="index.html#courses" class="text-gray-400 hover:text-white">Courses</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Dashboard</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-md font-semibold mb-4">Courses</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Web Development</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Data Science</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">AI & ML</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-md font-semibold mb-4">Contact Us</h4>
+                    <ul class="space-y-2">
+                        <li class="flex items-center text-gray-400">
+                            <i class="fas fa-map-marker-alt mr-2"></i>
+                            <span>123 Tech Park, Bangalore, India</span>
+                        </li>
+                        <li class="flex items-center text-gray-400">
+                            <i class="fas fa-phone-alt mr-2"></i>
+                            <span>+91 9876543210</span>
+                        </li>
+                        <li class="flex items-center text-gray-400">
+                            <i class="fas fa-envelope mr-2"></i>
+                            <span>info@softdev.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm mb-4 md:mb-0">© 2023 SOFT.dev. All rights reserved.</p>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white text-sm">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-white text-sm">Terms of Service</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+   <!-- Replace the entire script section in dashboard.html with this: -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // Get user data from localStorage
+        const userData = JSON.parse(localStorage.getItem('softDevUser')) || {
+            name: 'Guest User',
+            email: 'guest@example.com'
+        };
+        
+        // Get course from URL parameter
+        const urlParams = new URLSearchParams(window.location.search);
+        const courseId = urlParams.get('course') || 'fullstack';
+        
+        // Update user profile
+        updateUserProfile(userData);
+        
+        // Set course-specific content
+        setCourseContent(courseId);
+        
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+    });
+
+    function updateUserProfile(userData) {
+        // Set user name in all locations
+        document.querySelectorAll('.user-name').forEach(el => {
+            el.textContent = userData.name;
+        });
+        
+        // Set user avatar
+        const avatarUrl = userData.picture || `https://ui-avatars.com/api/?name=${encodeURIComponent(userData.name)}&background=4f46e5&color=fff`;
+        document.querySelectorAll('.user-avatar').forEach(el => {
+            el.src = avatarUrl;
+        });
+        
+        // Set user email if available
+        if (userData.email) {
+            const emailElements = document.querySelectorAll('.user-email');
+            if (emailElements.length > 0) {
+                emailElements.forEach(el => {
+                    el.textContent = userData.email;
+                });
+            }
+        }
+    }
+
+    function setCourseContent(courseId) {
+        const courses = {
+            'ai-ml': {
+                title: 'AI & Machine Learning Masterclass',
+                description: 'Learn to build intelligent systems with Python and TensorFlow from scratch.',
+                modules: [
+                    'Module 1: Python for Data Science',
+                    'Module 2: Machine Learning Fundamentals',
+                    'Module 3: Deep Learning with TensorFlow'
+                ],
+                image: 'https://images.unsplash.com/photo-1563986768609-322da13575f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
+                duration: '60 hours'
+            },
+            'fullstack': {
+                title: 'Full Stack Web Development',
+                description: 'Master MERN stack and build complete web applications with React and Node.js',
+                modules: [
+                    'Module 1: Frontend with React',
+                    'Module 2: Backend with Node.js',
+                    'Module 3: Database Integration'
+                ],
+                image: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80',
+                duration: '80 hours'
+            },
+            'data-science': {
+                title: 'Data Science & Analytics',
+                description: 'Become a data expert with Python, Pandas, NumPy, and visualization tools.',
+                modules: [
+                    'Module 1: Python for Data Analysis',
+                    'Module 2: Statistical Modeling',
+                    'Module 3: Data Visualization'
+                ],
+                image: 'https://images.unsplash.com/photo-1617791160536-598cf32026fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1364&q=80',
+                duration: '75 hours'
+            },
+            'frontend': {
+                title: 'Frontend Development',
+                description: 'Learn HTML5, CSS3 & JavaScript to become a Frontend Expert',
+                modules: [
+                    'Module 1: HTML & CSS Fundamentals',
+                    'Module 2: JavaScript Programming',
+                    'Module 3: Responsive Design'
+                ],
+                image: 'https://images.unsplash.com/photo-1617791160536-598cf32026fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1364&q=80',
+                duration: '28 hours'
+            }
+        };
+        
+        const course = courses[courseId] || courses['fullstack'];
+        
+        // Update course content
+        const courseHero = document.querySelector('.course-hero');
+        if (courseHero) {
+            courseHero.style.backgroundImage = `url('${course.image}')`;
+        }
+        
+        document.querySelector('.course-title').textContent = course.title;
+        document.querySelector('.course-description').textContent = course.description;
+        
+        // Update course stats
+        const durationElement = document.querySelector('.course-duration');
+        if (durationElement) {
+            durationElement.textContent = course.duration;
+        }
+        
+        // Update modules
+        const modulesContainer = document.querySelector('.course-modules');
+        if (modulesContainer) {
+            modulesContainer.innerHTML = '';
+            
+            course.modules.forEach((module, index) => {
+                const status = index === 0 ? 'Completed' : (index === 1 ? 'In Progress' : 'Not Started');
+                const statusClass = index === 0 ? 'bg-green-100 text-green-800' : 
+                                  (index === 1 ? 'bg-yellow-100 text-yellow-800' : 'bg-gray-100 text-gray-800');
+                
+                modulesContainer.innerHTML += `
+                    <div class="module-card bg-white rounded-xl shadow-md border border-gray-100 transition duration-300 overflow-hidden">
+                        <div class="flex items-center justify-between p-6">
+                            <div class="flex items-center">
+                                <div class="bg-indigo-100 w-12 h-12 rounded-full flex items-center justify-center mr-4">
+                                    <i class="fas fa-play text-indigo-600"></i>
+                                </div>
+                                <div>
+                                    <h4 class="font-bold text-gray-900">${module}</h4>
+                                    <p class="text-gray-600 text-sm">${index + 3} Lessons • ${25 + (index * 5)} Hours</p>
+                                </div>
+                            </div>
+                            <div>
+                                <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium ${statusClass}">
+                                    ${status}
+                                </span>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+    }
+    // Auth state observer for dashboard
+auth.onAuthStateChanged((user) => {
+    if (user) {
+        // User is signed in
+        updateDashboardProfile(user);
+    } else {
+        // Redirect to login if not authenticated
+        window.location.href = 'index.html';
+    }
+});
+
+function updateDashboardProfile(user) {
+    // Update profile picture
+    document.querySelectorAll('.user-avatar').forEach(img => {
+        img.src = user.photoURL || `https://ui-avatars.com/api/?name=${encodeURIComponent(user.displayName || user.email.split('@')[0])}&background=4f46e5&color=fff`;
+    });
+    
+    // Update user name
+    document.querySelectorAll('.user-name').forEach(el => {
+        el.textContent = user.displayName || user.email.split('@')[0];
+    });
+    
+    // Update user email if needed
+    document.querySelectorAll('.user-email').forEach(el => {
+        el.textContent = user.email;
+    });
+}
+</script>
+</body>
+</html>

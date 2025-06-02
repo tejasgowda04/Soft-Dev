@@ -1,0 +1,1092 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SOFT.dev - Master Modern Tech Skills</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+    
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.0/firebase-auth-compat.js"></script>
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        .hero-gradient {
+            background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 100%);
+        }
+        
+        .course-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+        }
+        
+        .feature-card:hover {
+            background-color: #f0f4ff;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .nav-link::after {
+            content: '';
+            display: block;
+            width: 0;
+            height: 2px;
+            background: #4f46e5;
+            transition: width .3s;
+            margin-top: 2px;
+        }
+        
+        /* Auth modal styles */
+        .auth-modal {
+            transition: all 0.3s ease;
+        }
+        
+        .auth-modal.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+        
+        .auth-tab.active {
+            background-color: #4f46e5;
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="bg-white shadow-md sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center">
+                    <div class="flex-shrink-0 flex items-center">
+                        <i class="fas fa-laptop-code text-indigo-600 text-2xl mr-2"></i>
+                        <span class="text-xl font-bold text-gray-900">SOFT.<span class="text-indigo-600">dev</span></span>
+                    </div>
+                    <div class="hidden md:block ml-10">
+                        <div class="flex space-x-8">
+                            <a href="#home" class="nav-link text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">Home</a>
+                            <a href="#courses" class="nav-link text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">Courses</a>
+                            <a href="#features" class="nav-link text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">Features</a>
+                            <a href="#testimonials" class="nav-link text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">Success Stories</a>
+                            <a href="#faq" class="nav-link text-gray-700 hover:text-indigo-600 px-3 py-2 rounded-md text-sm font-medium">FAQ</a>
+                        </div>
+                    </div>
+                </div>
+                <span class="user-name-placeholder font-semibold text-indigo-600"></span>
+
+                <div class="hidden md:block">
+                    <button onclick="openAuthModal('login')" class="text-indigo-600 hover:text-indigo-800 px-4 py-2 rounded-md text-sm font-medium transition duration-300 mr-3">
+                        Login
+                    </button>
+                    <button onclick="openAuthModal('register')" class="bg-indigo-600 text-white px-4 py-2 rounded-md text-sm font-medium hover:bg-indigo-700 transition duration-300">
+                        Sign Up
+                    </button>
+                </div>
+                <div class="md:hidden">
+                    <button id="mobile-menu-button" class="text-gray-500 hover:text-gray-900 inline-flex items-center justify-center p-2 rounded-md focus:outline-none">
+                        <i class="fas fa-bars text-xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Mobile menu -->
+        <div class="hidden" id="mobile-menu">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#home" class="nav-link text-gray-700 hover:text-indigo-600 block px-3 py-2 rounded-md text-base font-medium">Home</a>
+                <a href="#courses" class="nav-link text-gray-700 hover:text-indigo-600 block px-3 py-2 rounded-md text-base font-medium">Courses</a>
+                <a href="#features" class="nav-link text-gray-700 hover:text-indigo-600 block px-3 py-2 rounded-md text-base font-medium">Features</a>
+                <a href="#testimonials" class="nav-link text-gray-700 hover:text-indigo-600 block px-3 py-2 rounded-md text-base font-medium">Success Stories</a>
+                <a href="#faq" class="nav-link text-gray-700 hover:text-indigo-600 block px-3 py-2 rounded-md text-base font-medium">FAQ</a>
+                <div class="pt-2">
+                    <button onclick="openAuthModal('login')" class="w-full text-indigo-600 hover:text-indigo-800 px-4 py-2 rounded-md text-base font-medium transition duration-300 border border-indigo-600 mb-2">
+                        Login
+                    </button>
+                    <button onclick="openAuthModal('register')" class="w-full bg-indigo-600 text-white px-4 py-2 rounded-md text-base font-medium hover:bg-indigo-700 transition duration-300">
+                        Sign Up
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Auth Modal -->
+    <div id="authModal" class="auth-modal fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 opacity-0 pointer-events-none">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold text-gray-900" id="authModalTitle">Login to SOFT.dev</h3>
+                    <button onclick="closeAuthModal()" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <div class="flex mb-6">
+                    <button id="loginTab" onclick="switchAuthTab('login')" class="auth-tab flex-1 py-2 px-4 text-center font-medium rounded-l-lg border border-indigo-600">
+                        Login
+                    </button>
+                    <button id="registerTab" onclick="switchAuthTab('register')" class="auth-tab flex-1 py-2 px-4 text-center font-medium rounded-r-lg border border-indigo-600 border-l-0">
+                        Register
+                    </button>
+                </div>
+                
+                <!-- Login Form -->
+                <form id="loginForm" class="space-y-4">
+                    <div>
+                        <label for="loginEmail" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input type="email" id="loginEmail" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    
+                    <div>
+                        <label for="loginPassword" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                        <input type="password" id="loginPassword" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <input id="rememberMe" type="checkbox" class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                            <label for="rememberMe" class="ml-2 block text-sm text-gray-700">Remember me</label>
+                        </div>
+                        <a href="#" class="text-sm text-indigo-600 hover:text-indigo-500" onclick="resetPassword()">Forgot password?</a>
+                    </div>
+                    
+                    <div class="pt-2">
+                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-md font-medium">
+                            Login
+                        </button>
+                    </div>
+                    
+                    <div class="relative">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-gray-300"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-2 bg-white text-gray-500">Or continue with</span>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 gap-3">
+                        <div id="g_id_onload"
+                            data-client_id="805010523133-i8g1gglamuiudg0jrgjbtk5khqkvr0eg.apps.googleusercontent.com"
+                            data-context="signin"
+                            data-ux_mode="popup"
+                            data-callback="handleGoogleSignIn"
+                            data-auto_prompt="false">
+                        </div>
+
+                        <div class="g_id_signin"
+                            data-type="standard"
+                            data-shape="rectangular"
+                            data-theme="outline"
+                            data-text="continue_with"
+                            data-size="large"
+                            data-logo_alignment="left">
+                        </div>
+                    </div>
+                </form>
+                
+                <!-- Register Form -->
+                <form id="registerForm" class="space-y-4 hidden">
+                    <div>
+                        <label for="registerName" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                        <input type="text" id="registerName" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    
+                    <div>
+                        <label for="registerEmail" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input type="email" id="registerEmail" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    
+                    <div>
+                        <label for="registerPassword" class="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                        <input type="password" id="registerPassword" required minlength="6" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    
+                    <div>
+                        <label for="registerConfirmPassword" class="block text-sm font-medium text-gray-700 mb-1">Confirm Password</label>
+                        <input type="password" id="registerConfirmPassword" required minlength="6" class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    
+                    <div class="flex items-center">
+                        <input id="termsAgreement" type="checkbox" required class="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded">
+                        <label for="termsAgreement" class="ml-2 block text-sm text-gray-700">
+                            I agree to the <a href="#" class="text-indigo-600 hover:text-indigo-500">Terms of Service</a> and <a href="#" class="text-indigo-600 hover:text-indigo-500">Privacy Policy</a>
+                        </label>
+                    </div>
+                    
+                    <div class="pt-2">
+                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-2 rounded-md font-medium">
+                            Create Account
+                        </button>
+                    </div>
+                    
+                    <div class="relative">
+                        <div class="absolute inset-0 flex items-center">
+                            <div class="w-full border-t border-gray-300"></div>
+                        </div>
+                        <div class="relative flex justify-center text-sm">
+                            <span class="px-2 bg-white text-gray-500">Or sign up with</span>
+                        </div>
+                    </div>
+                    
+                    <div class="grid grid-cols-1 gap-3">
+                        <div id="g_id_onload_register"
+                            data-client_id="805010523133-i8g1gglamuiudg0jrgjbtk5khqkvr0eg.apps.googleusercontent.com"
+                            data-context="signup"
+                            data-ux_mode="popup"
+                            data-callback="handleGoogleSignIn"
+                            data-auto_prompt="false">
+                        </div>
+
+                        <div class="g_id_signin"
+                            data-type="standard"
+                            data-shape="rectangular"
+                            data-theme="outline"
+                            data-text="continue_with"
+                            data-size="large"
+                            data-logo_alignment="left">
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+     <!-- Hero Section -->
+    <section id="home" class="hero-gradient text-white pt-20 pb-32">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <h1 class="text-4xl md:text-5xl font-bold leading-tight mb-6">
+                        Master In-Demand Tech Skills with SOFT.dev
+                    </h1>
+                    <p class="text-xl mb-8 opacity-90">
+                        Learn from industry experts and accelerate your career with our cutting-edge online courses.
+                    </p>
+                    <div class="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
+                        <button class="bg-white text-indigo-600 hover:bg-gray-100 px-6 py-3 rounded-md text-lg font-semibold transition duration-300">
+                            <a href="#courses">Explore Courses</a>
+                        </button>
+                        <button onclick="openAuthModal('register')" class="border-2 border-white text-white hover:bg-white hover:text-indigo-600 px-6 py-3 rounded-md text-lg font-semibold transition duration-300">
+                            Join for Free
+                        </button>
+                    </div>
+                </div>
+                <div class="md:w-1/2 flex justify-center">
+                    <img src="https://images.unsplash.com/photo-1546410531-bb4caa6b424d?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1471&q=80" 
+                         alt="Online Learning" class="rounded-lg shadow-2xl w-full max-w-md">
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="bg-white py-16 -mt-16">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="bg-gray-50 rounded-xl shadow-lg p-8 grid grid-cols-1 md:grid-cols-4 gap-8 relative -top-16">
+                <div class="text-center">
+                    <div class="text-indigo-600 text-4xl font-bold mb-2">15,000+</div>
+                    <div class="text-gray-600">Students Enrolled</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-indigo-600 text-4xl font-bold mb-2">30+</div>
+                    <div class="text-gray-600">Courses Available</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-indigo-600 text-4xl font-bold mb-2">97%</div>
+                    <div class="text-gray-600">Satisfaction Rate</div>
+                </div>
+                <div class="text-center">
+                    <div class="text-indigo-600 text-4xl font-bold mb-2">24/7</div>
+                    <div class="text-gray-600">Support Available</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+
+    <!-- Courses Section -->
+    <section id="courses" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Popular Tech Courses</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Discover courses that will transform your career. Learn from industry experts at your own pace.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Course 1 -->
+                <div class="course-card bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 transition duration-300">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                             alt="AI & Machine Learning" class="w-full h-48 object-cover">
+                        <div class="absolute top-2 right-2 bg-yellow-400 text-xs font-bold px-2 py-1 rounded-full">
+                            Bestseller
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center text-yellow-400 mb-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                            <span class="text-gray-500 ml-2 text-sm">4.8 (1.2k)</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">AI & Machine Learning Masterclass</h3>
+                        <p class="text-gray-600 mb-4">Learn to build intelligent systems with Python and TensorFlow from scratch.</p>
+                        <div class="flex items-center text-gray-500 text-sm mb-4">
+                            <i class="far fa-clock mr-1"></i>
+                            <span>60 hours</span>
+                            <i class="fas fa-user-graduate mx-3"></i>
+                            <span>Beginner to Advanced</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-xl font-bold text-gray-900">₹6,999</span>
+                                <span class="text-gray-500 line-through ml-2">₹14,999</span>
+                            </div>
+                            <button onclick="showPaymentForm(6999, 'AI & Machine Learning Masterclass')" 
+                                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-300">
+                                Enroll Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Course 2 -->
+                <div class="course-card bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 transition duration-300">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1470&q=80" 
+                             alt="Full Stack Development" class="w-full h-48 object-cover">
+                        <div class="absolute top-2 right-2 bg-green-500 text-xs font-bold px-2 py-1 rounded-full text-white">
+                            New
+                        </div>
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center text-yellow-400 mb-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="far fa-star"></i>
+                            <span class="text-gray-500 ml-2 text-sm">4.5 (890)</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Full Stack Web Development</h3>
+                        <p class="text-gray-600 mb-4">Master MERN stack and build complete web applications with React and Node.js.</p>
+                        <div class="flex items-center text-gray-500 text-sm mb-4">
+                            <i class="far fa-clock mr-1"></i>
+                            <span>80 hours</span>
+                            <i class="fas fa-user-graduate mx-3"></i>
+                            <span>Beginner to Advanced</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-xl font-bold text-gray-900">₹5,999</span>
+                                <span class="text-gray-500 line-through ml-2">₹12,999</span>
+                            </div>
+                            <button onclick="showPaymentForm(8999, 'Full Stack Web Development')" 
+                                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-300">
+                                Enroll Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Course 3 -->
+                <div class="course-card bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 transition duration-300">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1617791160536-598cf32026fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1364&q=80" 
+                             alt="Data Science" class="w-full h-48 object-cover">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center text-yellow-400 mb-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span class="text-gray-500 ml-2 text-sm">5.0 (1.5k)</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Data Science & Analytics</h3>
+                        <p class="text-gray-600 mb-4">Become a data expert with Python, Pandas, NumPy, and visualization tools.</p>
+                        <div class="flex items-center text-gray-500 text-sm mb-4">
+                            <i class="far fa-clock mr-1"></i>
+                            <span>75 hours</span>
+                            <i class="fas fa-user-graduate mx-3"></i>
+                            <span>Intermediate to Advanced</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-xl font-bold text-gray-900">₹9,999</span>
+                                <span class="text-gray-500 line-through ml-2">₹15,999</span>
+                            </div>
+                            <button onclick="showPaymentForm(11999, 'Data Science & Analytics')" 
+                                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-300">
+                                Enroll Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <!-- Course 3 -->
+                <div class="course-card bg-white rounded-xl overflow-hidden shadow-lg border border-gray-100 transition duration-300">
+                    <div class="relative">
+                        <img src="https://images.unsplash.com/photo-1617791160536-598cf32026fb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1364&q=80" 
+                             alt="Data Science" class="w-full h-48 object-cover">
+                    </div>
+                    <div class="p-6">
+                        <div class="flex items-center text-yellow-400 mb-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <span class="text-gray-500 ml-2 text-sm">4.2 (1.9k)</span>
+                        </div>
+                        <h3 class="text-xl font-bold text-gray-900 mb-2">Frontend Development </h3>
+                        <p class="text-gray-600 mb-4">Learn HTML5 & CSS3 & Java Script to become a Frontend Expert.</p>
+                        <div class="flex items-center text-gray-500 text-sm mb-4">
+                            <i class="far fa-clock mr-1"></i>
+                            <span>28 hours</span>
+                            <i class="fas fa-user-graduate mx-3"></i>
+                            <span>Beginner to Intermediate</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <div>
+                                <span class="text-xl font-bold text-gray-900">₹3,499</span>
+                                <span class="text-gray-500 line-through ml-2">₹8,999</span>
+                            </div>
+                            <button onclick="showPaymentForm(3499, 'Frontend Development')" 
+                                    class="bg-indigo-600 hover:bg-indigo-700 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-300">
+                                Enroll Now
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12">
+                <button class="border-2 border-indigo-600 text-indigo-600 hover:bg-indigo-600 hover:text-white px-6 py-3 rounded-md text-lg font-semibold transition duration-300">
+                    View All Courses
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-16 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Why Learn with SOFT.dev?</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">Our unique approach to online learning gives you the edge to accelerate your career.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Feature 1 -->
+                <div class="feature-card bg-white p-8 rounded-xl shadow-md border border-gray-100 transition duration-300 text-center">
+                    <div class="bg-indigo-100 w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-laptop-code text-indigo-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Project-Based Learning</h3>
+                    <p class="text-gray-600">Gain real-world experience by building projects portfolio that employers value.</p>
+                </div>
+                
+                <!-- Feature 2 -->
+                <div class="feature-card bg-white p-8 rounded-xl shadow-md border border-gray-100 transition duration-300 text-center">
+                    <div class="bg-indigo-100 w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-chalkboard-teacher text-indigo-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Expert Instructors</h3>
+                    <p class="text-gray-600">Learn from industry professionals with years of practical experience.</p>
+                </div>
+                
+                <!-- Feature 3 -->
+                <div class="feature-card bg-white p-8 rounded-xl shadow-md border border-gray-100 transition duration-300 text-center">
+                    <div class="bg-indigo-100 w-16 h-16 mx-auto rounded-full flex items-center justify-center mb-6">
+                        <i class="fas fa-certificate text-indigo-600 text-2xl"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 mb-3">Industry Recognized Certificates</h3>
+                    <p class="text-gray-600">Earn certificates that enhance your resume and LinkedIn profile.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Section -->
+    <section id="testimonials" class="py-16 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Success Stories</h2>
+                <p class="text-lg text-gray-600 max-w-2xl mx-auto">What our students say about their learning experience with SOFT.dev.</p>
+            </div>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Testimonial 1 -->
+                <div class="bg-gray-50 p-8 rounded-xl">
+                    <div class="flex items-center mb-4">
+                        <div class="flex items-center text-yellow-400 mr-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <span class="text-gray-500 text-sm">2 months ago</span>
+                    </div>
+                    <p class="text-gray-700 mb-6">"The AI course completely transformed my career. Within 3 months of completing it, I landed a job at a top tech company. The projects we built were exactly what interviewers wanted to see."</p>
+                    <div class="flex items-center">
+                        <img src="https://randomuser.me/api/portraits/women/45.jpg" alt="Priya K." class="w-12 h-12 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-bold text-gray-900">Priya K.</h4>
+                            <p class="text-sm text-gray-600">AI Engineer at TechSolutions</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 2 -->
+                <div class="bg-gray-50 p-8 rounded-xl">
+                    <div class="flex items-center mb-4">
+                        <div class="flex items-center text-yellow-400 mr-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                        </div>
+                        <span class="text-gray-500 text-sm">1 month ago</span>
+                    </div>
+                    <p class="text-gray-700 mb-6">"As a self-taught developer, I was struggling to get interviews. After completing the Full Stack course and adding the projects to my portfolio, I received multiple job offers."</p>
+                    <div class="flex items-center">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="Rahul S." class="w-12 h-12 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-bold text-gray-900">Rahul S.</h4>
+                            <p class="text-sm text-gray-600">Full Stack Developer</p>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Testimonial 3 -->
+                <div class="bg-gray-50 p-8 rounded-xl">
+                    <div class="flex items-center mb-4">
+                        <div class="flex items-center text-yellow-400 mr-2">
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star"></i>
+                            <i class="fas fa-star-half-alt"></i>
+                        </div>
+                        <span class="text-gray-500 text-sm">3 weeks ago</span>
+                    </div>
+                    <p class="text-gray-700 mb-6">"The instructors explain complex topics in a way that's easy to understand. The community support is amazing - I never felt alone in my learning journey."</p>
+                    <div class="flex items-center">
+                        <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Ananya P." class="w-12 h-12 rounded-full mr-4">
+                        <div>
+                            <h4 class="font-bold text-gray-900">Ananya P.</h4>
+                            <p class="text-sm text-gray-600">Data Analyst</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section id="faq" class="py-16 bg-gray-50">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Frequently Asked Questions</h2>
+                <p class="text-lg text-gray-600">Find quick answers to common questions about our courses and platform.</p>
+            </div>
+            
+            <div class="space-y-4">
+                <!-- FAQ Item 1 -->
+                <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                    <button class="faq-btn flex justify-between items-center p-6 w-full text-left" onclick="toggleFAQ(this)">
+                        <span class="text-lg font-medium text-gray-900">How does the course enrollment work?</span>
+                        <i class="fas fa-chevron-down text-indigo-600 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-6">
+                        <p class="text-gray-600">Once you enroll in a course by completing the payment, you'll get immediate access to all course materials. You can learn at your own pace and revisit the content anytime. Our platform tracks your progress and allows you to pick up where you left off.</p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 2 -->
+                <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                    <button class="faq-btn flex justify-between items-center p-6 w-full text-left" onclick="toggleFAQ(this)">
+                        <span class="text-lg font-medium text-gray-900">Do you offer certificates upon completion?</span>
+                        <i class="fas fa-chevron-down text-indigo-600 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-6">
+                        <p class="text-gray-600">Yes, all our courses include a verifiable certificate of completion once you finish all the course content and complete assigned projects. These certificates are recognized by industry professionals and can be shared on LinkedIn or included in your resume.</p>
+                    </div>
+                </div>
+                
+                <!-- FAQ Item 3 -->
+                <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                    <button class="faq-btn flex justify-between items-center p-6 w-full text-left" onclick="toggleFAQ(this)">
+                        <span class="text-lg font-medium text-gray-900">What if I need help during the course?</span>
+                        <i class="fas fa-chevron-down text-indigo-600 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-6">
+                        <p class="text-gray-600">We provide multiple support channels including a dedicated Q&A section for each course, community forums where you can connect with fellow students and instructors, and in some courses, regular live Q&A sessions. Our team typically responds to questions within 24 hours.</p>
+                    </div>
+                </div>
+                
+                 <!-- FAQ Item 4 -->
+                <div class="bg-white border border-gray-200 rounded-lg overflow-hidden">
+                    <button class="faq-btn flex justify-between items-center p-6 w-full text-left" onclick="toggleFAQ(this)">
+                        <span class="text-lg font-medium text-gray-900">Do you offer job placement assistance?</span>
+                        <i class="fas fa-chevron-down text-indigo-600 transition-transform duration-300"></i>
+                    </button>
+                    <div class="faq-content hidden px-6 pb-6">
+                        <p class="text-gray-600">While we don't guarantee job placement, we offer extensive career support including resume reviews, interview preparation resources, and a job board with opportunities from our hiring partners. Many of our students successfully transition to tech roles after completing our programs.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="py-16 bg-indigo-700 text-white">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-3xl font-bold mb-6">Ready to Transform Your Career?</h2>
+            <p class="text-xl mb-8 max-w-2xl mx-auto">Join thousands of students who have accelerated their careers with SOFT.dev Courses.</p>
+            <div class="flex flex-col sm:flex-row justify-center space-y-3 sm:space-y-0 sm:space-x-4">
+                <button class="bg-white text-indigo-600 hover:bg-gray-100 px-8 py-3 rounded-md text-lg font-semibold transition duration-300">
+                    Browse All Courses
+                </button>
+                <button class="border-2 border-white hover:bg-indigo-600 hover:bg-opacity-10 px-8 py-3 rounded-md text-lg font-semibold transition duration-300">
+                    Contact Support
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Payment Modal -->
+    <div id="paymentModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white rounded-lg shadow-xl w-full max-w-md mx-4">
+            <div class="p-6">
+                <div class="flex justify-between items-center mb-4">
+                    <h3 class="text-xl font-bold text-gray-900">Complete Your Enrollment</h3>
+                    <button onclick="document.getElementById('paymentModal').classList.add('hidden')" class="text-gray-500 hover:text-gray-700">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                
+                <form id="paymentForm" onsubmit="processPayment(event)" class="space-y-4">
+                    <input type="hidden" id="courseAmount">
+                    <input type="hidden" id="courseName">
+                    
+                    <div>
+                        <label for="name" class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                        <input type="text" id="name" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    
+                    <div>
+                        <label for="email" class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                        <input type="email" id="email" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    
+                    <div>
+                        <label for="phone" class="block text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+                        <input type="tel" id="phone" required class="w-full px-4 py-2 border border-gray-300 rounded-md focus:ring-indigo-500 focus:border-indigo-500">
+                    </div>
+                    
+                    <div class="pt-4">
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-700">Course:</span>
+                            <span id="displayCourseName" class="font-medium"></span>
+                        </div>
+                        <div class="flex justify-between mb-2">
+                            <span class="text-gray-700">Amount:</span>
+                            <span id="displayCourseAmount" class="font-medium text-indigo-600"></span>
+                        </div>
+                        <div class="flex justify-between border-t border-gray-200 pt-2">
+                            <span class="text-lg font-bold text-gray-900">Total:</span>
+                            <span id="displayTotal" class="text-lg font-bold text-indigo-600"></span>
+                        </div>
+                    </div>
+                    
+                    <div class="pt-4">
+                        <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white py-3 rounded-md font-medium">
+                            Proceed to Payment
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8 mb-8">
+                <div>
+                    <h3 class="text-lg font-bold mb-4 flex items-center">
+                        <i class="fas fa-laptop-code text-indigo-400 text-2xl mr-2"></i>
+                        <span>SOFT.<span class="text-indigo-400">dev</span></span>
+                    </h3>
+                    <p class="text-gray-400">Advancing careers through cutting-edge tech education. Learn from industry experts and accelerate your growth.</p>
+                    <div class="flex space-x-4 mt-4">
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="text-gray-400 hover:text-white"><i class="fab fa-instagram"></i></a>
+                    </div>
+                </div>
+                
+                <div>
+                    <h4 class="text-md font-semibold mb-4">Quick Links</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#home" class="text-gray-400 hover:text-white">Home</a></li>
+                        <li><a href="#courses" class="text-gray-400 hover:text-white">Courses</a></li>
+                        <li><a href="#features" class="text-gray-400 hover:text-white">Features</a></li>
+                        <li><a href="#testimonials" class="text-gray-400 hover:text-white">Success Stories</a></li>
+                        <li><a href="#faq" class="text-gray-400 hover:text-white">FAQ</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-md font-semibold mb-4">Courses</h4>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white">Web Development</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Data Science</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">AI & ML</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Mobile Development</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Cloud Computing</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h4 class="text-md font-semibold mb-4">Contact Us</h4>
+                    <ul class="space-y-2">
+                        <li class="flex items-center text-gray-400">
+                            <i class="fas fa-map-marker-alt mr-2"></i>
+                            <span>123 Tech Park, Bangalore, India</span>
+                        </li>
+                        <li class="flex items-center text-gray-400">
+                            <i class="fas fa-phone-alt mr-2"></i>
+                            <span>+91 9876543210</span>
+                        </li>
+                        <li class="flex items-center text-gray-400">
+                            <i class="fas fa-envelope mr-2"></i>
+                            <span>info@softdev.com</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-800 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-400 text-sm mb-4 md:mb-0">© 2023 SOFT.dev. All rights reserved.</p>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white text-sm">Privacy Policy</a>
+                    <a href="#" class="text-gray-400 hover:text-white text-sm">Terms of Service</a>
+                    <a href="#" class="text-gray-400 hover:text-white text-sm">Refund Policy</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script>
+        // Firebase configuration and initialization
+        const firebaseConfig = {
+    apiKey: "AIzaSyA-IezE4A_aXsBVle40HpHGzJilIk3otng",
+    authDomain: "soft-dev-77c05.firebaseapp.com",
+    projectId: "soft-dev-77c05",
+    storageBucket: "soft-dev-77c05.firebasestorage.app",
+    messagingSenderId: "436570457834",
+    appId: "1:436570457834:web:ae85fa97bc1512062c3993",
+    measurementId: "G-RPW44ZWE52"
+  };
+
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+
+        // Mobile menu toggle
+        document.getElementById('mobile-menu-button').addEventListener('click', function() {
+            document.getElementById('mobile-menu').classList.toggle('hidden');
+        });
+
+        // FAQ toggle function
+        function toggleFAQ(button) {
+            const content = button.nextElementSibling;
+            const icon = button.querySelector('i');
+            
+            content.classList.toggle('hidden');
+            icon.classList.toggle('transform');
+            icon.classList.toggle('rotate-180');
+        }
+
+        // Auth modal functions
+        function openAuthModal(type) {
+            document.getElementById('authModal').classList.add('active');
+            document.getElementById('authModal').classList.remove('opacity-0');
+            document.getElementById('authModal').classList.remove('pointer-events-none');
+            
+            if (type === 'login') {
+                switchAuthTab('login');
+                document.getElementById('authModalTitle').textContent = 'Login to SOFT.dev';
+            } else {
+                switchAuthTab('register');
+                document.getElementById('authModalTitle').textContent = 'Create an Account';
+            }
+        }
+
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.remove('active');
+            document.getElementById('authModal').classList.add('opacity-0');
+            document.getElementById('authModal').classList.add('pointer-events-none');
+        }
+
+        function switchAuthTab(tab) {
+            if (tab === 'login') {
+                document.getElementById('loginTab').classList.add('active');
+                document.getElementById('loginTab').classList.add('text-white');
+                document.getElementById('loginTab').classList.remove('text-indigo-600');
+                document.getElementById('registerTab').classList.remove('active');
+                document.getElementById('registerTab').classList.remove('text-white');
+                document.getElementById('registerTab').classList.add('text-indigo-600');
+                
+                document.getElementById('loginForm').classList.remove('hidden');
+                document.getElementById('registerForm').classList.add('hidden');
+            } else {
+                document.getElementById('registerTab').classList.add('active');
+                document.getElementById('registerTab').classList.add('text-white');
+                document.getElementById('registerTab').classList.remove('text-indigo-600');
+                document.getElementById('loginTab').classList.remove('active');
+                document.getElementById('loginTab').classList.remove('text-white');
+                document.getElementById('loginTab').classList.add('text-indigo-600');
+                
+                document.getElementById('registerForm').classList.remove('hidden');
+                document.getElementById('loginForm').classList.add('hidden');
+            }
+        }
+
+        // Firebase Authentication Functions
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Signed in
+                    const user = userCredential.user;
+                    console.log('User logged in:', user);
+                    alert('Login successful!');
+                    closeAuthModal();
+                    
+                    // Store user data in localStorage
+                    localStorage.setItem('softDevUser', JSON.stringify({
+                        uid: user.uid,
+                        email: user.email,
+                        displayName: user.displayName || email.split('@')[0]
+                    }));
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    console.error('Login error:', errorCode, errorMessage);
+                    alert('Login failed: ' + errorMessage);
+                });
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const name = document.getElementById('registerName').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const confirmPassword = document.getElementById('registerConfirmPassword').value;
+            
+            if (password !== confirmPassword) {
+                alert('Passwords do not match!');
+                return;
+            }
+            
+            if (password.length < 6) {
+                alert('Password must be at least 6 characters long!');
+                return;
+            }
+            
+            auth.createUserWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    // Signed up
+                    const user = userCredential.user;
+                    
+                    // Update user profile with name
+                    return user.updateProfile({
+                        displayName: name
+                    }).then(() => {
+                        console.log('User registered:', user);
+                        alert('Registration successful!');
+                        closeAuthModal();
+                        
+                        // Store user data in localStorage
+                        localStorage.setItem('softDevUser', JSON.stringify({
+                            uid: user.uid,
+                            email: user.email,
+                            displayName: name
+                        }));
+                    });
+                })
+                .catch((error) => {
+                    const errorCode = error.code;
+                    const errorMessage = error.message;
+                    console.error('Registration error:', errorCode, errorMessage);
+                    alert('Registration failed: ' + errorMessage);
+                });
+        });
+
+        // Password reset function
+        function resetPassword() {
+            const email = document.getElementById('loginEmail').value;
+            
+            if (!email) {
+                alert('Please enter your email address first');
+                return;
+            }
+            
+            auth.sendPasswordResetEmail(email)
+                .then(() => {
+                    alert('Password reset email sent! Please check your inbox.');
+                })
+                .catch((error) => {
+                    console.error('Password reset error:', error);
+                    alert('Error sending password reset email: ' + error.message);
+                });
+        }
+
+        // Google Sign-In handler
+        function handleGoogleSignIn(response) {
+            const credential = firebase.auth.GoogleAuthProvider.credential(response.credential);
+            
+            auth.signInWithCredential(credential)
+                .then((userCredential) => {
+                    // Signed in with Google
+                    const user = userCredential.user;
+                    console.log('Google sign-in successful:', user);
+                    alert('Welcome ' + user.displayName + '!');
+                    closeAuthModal();
+                    
+                    // Store user data in localStorage
+                    localStorage.setItem('softDevUser', JSON.stringify({
+                        uid: user.uid,
+                        email: user.email,
+                        displayName: user.displayName,
+                        photoURL: user.photoURL
+                    }));
+                })
+                .catch((error) => {
+                    console.error('Google sign-in error:', error);
+                    alert('Google sign-in failed: ' + error.message);
+                });
+        }
+
+        // Check auth state
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                // User is signed in
+                console.log('User is logged in:', user);
+            } else {
+                // User is signed out
+                console.log('User is logged out');
+            }
+        });
+
+        // Show payment form
+        function showPaymentForm(amount, courseName) {
+            document.getElementById('paymentModal').classList.remove('hidden');
+            document.getElementById('courseAmount').value = amount;
+            document.getElementById('courseName').value = courseName;
+            
+            // Update the display values
+            document.getElementById('displayCourseName').textContent = courseName;
+            document.getElementById('displayCourseAmount').textContent = `₹${amount.toLocaleString('en-IN')}`;
+            document.getElementById('displayTotal').textContent = `₹${amount.toLocaleString('en-IN')}`;
+        }
+
+        // Process payment with Razorpay
+        function processPayment(e) {
+            e.preventDefault();
+            
+            const amount = document.getElementById('courseAmount').value;
+            const courseName = document.getElementById('courseName').value;
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            
+            // Get current user
+            const user = auth.currentUser;
+            
+            if (!user) {
+                alert('Please login before making a payment');
+                return;
+            }
+            
+            // Store user data and course in localStorage
+            const userData = {
+                uid: user.uid,
+                name: name,
+                email: email,
+                phone: phone,
+                enrolledCourse: courseName,
+                enrolledCourseId: getCourseId(courseName)
+            };
+            localStorage.setItem('softDevUser', JSON.stringify(userData));
+            
+            // Razorpay payment code
+            const options = {
+                "key": "rzp_test_1DP5mmOlF5G5ag",
+                "amount": parseInt(amount) * 100,
+                "currency": "INR",
+                "name": "SOFT.dev",
+                "description": courseName,
+                "image": "https://example.com/your_logo.jpg",
+                "order_id": "",
+                "handler": function(response) {
+                    // On successful payment, redirect to dashboard
+                    window.location.href = 'dashboard.html?course=' + getCourseId(courseName);
+                },
+                "prefill": {
+                    "name": name,
+                    "email": email,
+                    "contact": phone
+                },
+                "notes": {
+                    "address": "SOFT.dev Office"
+                },
+                "theme": {
+                    "color": "#4f46e5"
+                }
+            };
+            
+            const rzp = new Razorpay(options);
+            rzp.open();
+        }
+
+        // Helper function to map course names to IDs
+        function getCourseId(courseName) {
+            const courses = {
+                "AI & Machine Learning Masterclass": "ai-ml",
+                "Full Stack Web Development": "fullstack",
+                "Data Science & Analytics": "data-science",
+                "Frontend Development": "frontend"
+            };
+            return courses[courseName] || 'fullstack';
+        }
+    </script>
+    <script type="module" src="main.js"></script>
+
+</body>
+</html>

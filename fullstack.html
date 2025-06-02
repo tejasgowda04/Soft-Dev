@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Full Stack Development | SOFT.dev</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        .sidebar {
+            transition: all 0.3s ease;
+        }
+        
+        .lesson-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        }
+        
+        .active-lesson {
+            border-left: 4px solid #3b82f6;
+            background-color: #eff6ff;
+        }
+        
+        @media (max-width: 768px) {
+            .sidebar {
+                transform: translateX(-100%);
+                position: fixed;
+                z-index: 40;
+                height: 100vh;
+            }
+            .sidebar.active {
+                transform: translateX(0);
+            }
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Mobile Header -->
+    <div class="md:hidden bg-white shadow-sm fixed top-0 left-0 right-0 z-30">
+        <div class="flex items-center justify-between px-4 py-3">
+            <button id="mobileMenuButton" class="text-gray-600">
+                <i class="fas fa-bars text-xl"></i>
+            </button>
+            <a href="#" class="text-xl font-bold text-gray-800">
+                SOFT.<span class="text-blue-600">dev</span>
+            </a>
+            <div class="w-8"></div> <!-- Spacer for balance -->
+        </div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar bg-white w-64 fixed h-full shadow-md z-20">
+        <div class="p-6">
+            <a href="#" class="text-xl font-bold text-gray-800 flex items-center">
+                <i class="fas fa-laptop-code text-blue-600 mr-2"></i>
+                SOFT.<span class="text-blue-600">dev</span>
+            </a>
+        </div>
+        
+        <div class="px-4 pb-6">
+            <div class="flex items-center space-x-3 p-3 bg-blue-50 rounded-lg">
+                <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User" class="w-10 h-10 rounded-full">
+                <div>
+                    <h4 class="font-medium text-gray-800">Rahul Sharma</h4>
+                    <p class="text-xs text-gray-500">Premium Member</p>
+                </div>
+            </div>
+        </div>
+        
+        <nav class="mt-6">
+            <div class="px-4">
+                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Course Content</h3>
+            </div>
+            <div class="mt-3">
+                <!-- Module 1 -->
+                <div class="mb-2">
+                    <div class="flex items-center justify-between px-4 py-2 bg-gray-100">
+                        <h4 class="font-medium text-gray-800">Module 1: HTML & CSS</h4>
+                        <i class="fas fa-chevron-down text-gray-500 text-xs"></i>
+                    </div>
+                    <div class="pl-6 pr-4">
+                        <a href="#" class="block py-2 text-sm text-gray-600 hover:text-blue-600">1.1 HTML Fundamentals</a>
+                        <a href="#" class="block py-2 text-sm text-gray-600 hover:text-blue-600">1.2 CSS Styling</a>
+                        <a href="#" class="block py-2 text-sm text-gray-600 hover:text-blue-600">1.3 Responsive Design</a>
+                    </div>
+                </div>
+                
+                <!-- Module 2 -->
+                <div class="mb-2">
+                    <div class="flex items-center justify-between px-4 py-2 bg-gray-100">
+                        <h4 class="font-medium text-gray-800">Module 2: JavaScript</h4>
+                        <i class="fas fa-chevron-down text-gray-500 text-xs"></i>
+                    </div>
+                    <div class="pl-6 pr-4">
+                        <a href="#" class="block py-2 text-sm text-gray-600 hover:text-blue-600">2.1 JavaScript Basics</a>
+                        <a href="#" class="block py-2 text-sm text-gray-600 hover:text-blue-600">2.2 DOM Manipulation</a>
+                        <a href="#" class="block py-2 text-sm text-gray-600 hover:text-blue-600">2.3 Async JavaScript</a>
+                    </div>
+                </div>
+                
+                <!-- Module 3 -->
+                <div class="mb-2">
+                    <div class="flex items-center justify-between px-4 py-2 bg-gray-100">
+                        <h4 class="font-medium text-gray-800">Module 3: React</h4>
+                        <i class="fas fa-chevron-down text-gray-500 text-xs"></i>
+                    </div>
+                    <div class="pl-6 pr-4">
+                        <a href="#" class="block py-2 text-sm text-gray-600 hover:text-blue-600">3.1 React Fundamentals</a>
+                        <a href="#" class="block py-2 text-sm text-gray-600 hover:text-blue-600">3.2 Hooks & Context</a>
+                        <a href="#" class="block py-2 text-sm text-blue-600 font-medium active-lesson">3.3 Building a REST API</a>
+                        <a href="#" class="block py-2 text-sm text-gray-600 hover:text-blue-600">3.4 State Management</a>
+                    </div>
+                </div>
+                
+                <!-- Module 4 -->
+                <div class="mb-2">
+                    <div class="flex items-center justify-between px-4 py-2 bg-gray-100">
+                        <h4 class="font-medium text-gray-800">Module 4: Node.js & MongoDB</h4>
+                        <i class="fas fa-chevron-down text-gray-500 text-xs"></i>
+                    </div>
+                    <div class="pl-6 pr-4">
+                        <a href="#" class="block py-2 text-sm text-gray-600 hover:text-blue-600">4.1 Node.js Basics</a>
+                        <a href="#" class="block py-2 text-sm text-gray-600 hover:text-blue-600">4.2 Express Framework</a>
+                        <a href="#" class="block py-2 text-sm text-gray-600 hover:text-blue-600">4.3 MongoDB & Mongoose</a>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="px-4 mt-6">
+                <h3 class="text-xs font-semibold text-gray-500 uppercase tracking-wider">Resources</h3>
+            </div>
+            <div class="mt-3">
+                <a href="#" class="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50">
+                    <i class="fas fa-book mr-3 text-blue-500"></i>
+                    <span>Course Materials</span>
+                </a>
+                <a href="#" class="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50">
+                    <i class="fas fa-file-code mr-3 text-indigo-500"></i>
+                    <span>Code Examples</span>
+                </a>
+                <a href="#" class="flex items-center px-4 py-3 text-gray-600 hover:bg-gray-50">
+                    <i class="fas fa-users mr-3 text-green-500"></i>
+                    <span>Community Forum</span>
+                </a>
+            </div>
+        </nav>
+    </div>
+
+    <!-- Main Content -->
+    <div class="md:ml-64 min-h-screen">
+        <div class="bg-white shadow-sm">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
+                <div class="flex items-center justify-between">
+                    <div>
+                        <h1 class="text-2xl font-bold text-gray-900">Full Stack Development</h1>
+                        <p class="text-sm text-gray-600">Module 3: React • Lesson 3.3</p>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="hidden md:block">
+                            <div class="flex items-center">
+                                <div class="w-32 bg-gray-200 rounded-full h-2.5 mr-2">
+                                    <div class="bg-blue-600 h-2.5 rounded-full" style="width: 40%"></div>
+                                </div>
+                                <span class="text-sm text-gray-600">40% complete</span>
+                            </div>
+                        </div>
+                        <button class="p-2 text-gray-500 hover:text-gray-700">
+                            <i class="fas fa-question-circle"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col lg:flex-row gap-8">
+                <!-- Lesson Content -->
+                <div class="lg:w-2/3">
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
+                        <div class="aspect-w-16 aspect-h-9 bg-black">
+                            <iframe class="w-full h-96" src="https://www.youtube.com/embed/7CqJlxBYj-M" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                        <div class="p-6">
+                            <h2 class="text-xl font-bold text-gray-900 mb-2">Building a REST API</h2>
+                            <div class="flex items-center text-sm text-gray-500 mb-4">
+                                <span>Lesson 3.3</span>
+                                <span class="mx-2">•</span>
+                                <span>52 minutes</span>
+                                <span class="mx-2">•</span>
+                                <span class="text-blue-600">Intermediate</span>
+                            </div>
+                            <p class="text-gray-700 mb-6">
+                                In this lesson, you'll learn how to build a complete RESTful API using Node.js and Express. We'll cover routing, middleware, error handling, and connecting to a MongoDB database. By the end, you'll have a fully functional API ready to connect to your React frontend.
+                            </p>
+                            <div class="flex items-center justify-between">
+                                <button class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-md text-sm font-medium transition duration-300">
+                                    <i class="fas fa-check-circle mr-2"></i> Mark Complete
+                                </button>
+                                <div class="flex space-x-2">
+                                    <button class="p-2 text-gray-500 hover:text-blue-600">
+                                        <i class="fas fa-bookmark"></i>
+                                    </button>
+                                    <button class="p-2 text-gray-500 hover:text-blue-600">
+                                        <i class="fas fa-share-alt"></i>
+                                    </button>
+                                    <button class="p-2 text-gray-500 hover:text-blue-600">
+                                        <i class="fas fa-download"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Assignment -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-6">
+                        <div class="p-5 border-b border-gray-200 bg-blue-50">
+                            <h3 class="font-medium text-gray-900 flex items-center">
+                                <i class="fas fa-tasks text-blue-600 mr-2"></i>
+                                <span>Assignment: Build a REST API</span>
+                            </h3>
+                        </div>
+                        <div class="p-5">
+                            <p class="text-gray-700 mb-4">
+                                Create a REST API for a blog application with the following endpoints:
+                            </p>
+                            <ul class="list-disc pl-5 text-gray-700 mb-4 space-y-1">
+                                <li>GET /posts - Retrieve all blog posts</li>
+                                <li>POST /posts - Create a new blog post</li>
+                                <li>GET /posts/:id - Retrieve a single blog post</li>
+                                <li>PUT /posts/:id - Update a blog post</li>
+                                <li>DELETE /posts/:id - Delete a blog post</li>
+                            </ul>
+                            <p class="text-gray-700 mb-4">
+                                Your API should include proper error handling, validation, and connect to a MongoDB database.
+                            </p>
+                            <div class="flex items-center justify-between">
+                                <div>
+                                    <span class="text-xs bg-yellow-100 text-yellow-800 px-2 py-1 rounded-full">Due in 3 days</span>
+                                </div>
+                                <div class="flex space-x-2">
+                                    <button class="text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                        View Submission
+                                    </button>
+                                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-3 py-1 rounded-md text-sm font-medium transition duration-300">
+                                        Submit
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Lesson Navigation -->
+                    <div class="flex justify-between mb-8">
+                        <a href="#" class="flex items-center text-blue-600 hover:text-blue-800">
+                            <i class="fas fa-arrow-left mr-2"></i>
+                            <span>Previous Lesson</span>
+                        </a>
+                        <a href="#" class="flex items-center text-blue-600 hover:text-blue-800">
+                            <span>Next Lesson</span>
+                            <i class="fas fa-arrow-right ml-2"></i>
+                        </a>
+                    </div>
+                    
+                    <!-- Resources -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mb-8">
+                        <div class="p-5 border-b border-gray-200">
+                            <h3 class="font-medium text-gray-900">Lesson Resources</h3>
+                        </div>
+                        <div class="divide-y divide-gray-200">
+                            <a href="#" class="flex items-center justify-between p-4 hover:bg-gray-50">
+                                <div class="flex items-center">
+                                    <div class="bg-blue-100 rounded-lg p-2 mr-4">
+                                        <i class="fas fa-file-pdf text-blue-600"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-medium text-gray-900">REST API Best Practices</h4>
+                                        <p class="text-xs text-gray-500">PDF • 1.8 MB</p>
+                                    </div>
+                                </div>
+                                <i class="fas fa-download text-gray-400"></i>
+                            </a>
+                            <a href="#" class="flex items-center justify-between p-4 hover:bg-gray-50">
+                                <div class="flex items-center">
+                                    <div class="bg-indigo-100 rounded-lg p-2 mr-4">
+                                        <i class="fas fa-file-code text-indigo-600"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-medium text-gray-900">Starter Code</h4>
+                                        <p class="text-xs text-gray-500">ZIP • 2.1 MB</p>
+                                    </div>
+                                </div>
+                                <i class="fas fa-download text-gray-400"></i>
+                            </a>
+                            <a href="#" class="flex items-center justify-between p-4 hover:bg-gray-50">
+                                <div class="flex items-center">
+                                    <div class="bg-green-100 rounded-lg p-2 mr-4">
+                                        <i class="fas fa-link text-green-600"></i>
+                                    </div>
+                                    <div>
+                                        <h4 class="text-sm font-medium text-gray-900">Express Documentation</h4>
+                                        <p class="text-xs text-gray-500">External Link</p>
+                                    </div>
+                                </div>
+                                <i class="fas fa-external-link-alt text-gray-400"></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Course Progress -->
+                <div class="lg:w-1/3">
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden sticky top-8">
+                        <div class="p-5 border-b border-gray-200">
+                            <h3 class="font-medium text-gray-900">Course Progress</h3>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex items-center justify-center mb-4">
+                                <div class="relative w-32 h-32">
+                                    <svg class="w-full h-full" viewBox="0 0 100 100">
+                                        <circle class="text-gray-200" stroke-width="8" stroke="currentColor" fill="transparent" r="40" cx="50" cy="50" />
+                                        <circle class="text-blue-600" stroke-width="8" stroke-dasharray="251.2" stroke-dashoffset="150.72" stroke-linecap="round" stroke="currentColor" fill="transparent" r="40" cx="50" cy="50" />
+                                    </svg>
+                                    <div class="absolute inset-0 flex items-center justify-center">
+                                        <span class="text-2xl font-bold">40%</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space-y-3">
+                                <div>
+                                    <div class="flex justify-between text-sm mb-1">
+                                        <span class="font-medium">Completed Lessons</span>
+                                        <span>8/25</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-blue-600 h-2 rounded-full" style="width: 32%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-sm mb-1">
+                                        <span class="font-medium">Assignments</span>
+                                        <span>2/6</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-indigo-500 h-2 rounded-full" style="width: 33%"></div>
+                                    </div>
+                                </div>
+                                <div>
+                                    <div class="flex justify-between text-sm mb-1">
+                                        <span class="font-medium">Quizzes</span>
+                                        <span>1/4</span>
+                                    </div>
+                                    <div class="w-full bg-gray-200 rounded-full h-2">
+                                        <div class="bg-green-500 h-2 rounded-full" style="width: 25%"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="p-5 border-t border-gray-200">
+                            <button class="w-full bg-blue-600 hover:bg-blue-700 text-white py-2 rounded-md font-medium transition duration-300">
+                                Download Certificate
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Instructor -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mt-6">
+                        <div class="p-5 border-b border-gray-200">
+                            <h3 class="font-medium text-gray-900">Course Instructor</h3>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex items-center">
+                                <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Instructor" class="w-16 h-16 rounded-full mr-4">
+                                <div>
+                                    <h4 class="font-medium text-gray-900">Ananya Patel</h4>
+                                    <p class="text-sm text-gray-600">Senior Full Stack Developer</p>
+                                    <div class="flex mt-1">
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <i class="fas fa-star text-yellow-400 text-xs"></i>
+                                        <span class="text-xs text-gray-500 ml-1">5.0 (890)</span>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-700 mt-4">
+                                Ananya has been building web applications for over 10 years. She specializes in the MERN stack and has worked with companies like Google and Amazon. Her teaching style focuses on practical, real-world applications.
+                            </p>
+                            <button class="mt-4 text-blue-600 hover:text-blue-800 text-sm font-medium">
+                                View Profile
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- Community -->
+                    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mt-6">
+                        <div class="p-5 border-b border-gray-200">
+                            <h3 class="font-medium text-gray-900">Course Community</h3>
+                        </div>
+                        <div class="p-5">
+                            <div class="flex items-center space-x-3 mb-4">
+                                <div class="flex -space-x-2">
+                                    <img src="https://randomuser.me/api/portraits/women/44.jpg" alt="User" class="w-8 h-8 rounded-full border-2 border-white">
+                                    <img src="https://randomuser.me/api/portraits/men/22.jpg" alt="User" class="w-8 h-8 rounded-full border-2 border-white">
+                                    <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="User" class="w-8 h-8 rounded-full border-2 border-white">
+                                </div>
+                                <span class="text-sm text-gray-600">+ 124 others learning with you</span>
+                            </div>
+                            <button class="w-full bg-blue-50 hover:bg-blue-100 text-blue-600 py-2 rounded-md font-medium transition duration-300">
+                                <i class="fas fa-users mr-2"></i> Join Discussion
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Mobile menu toggle
+        document.getElementById('mobileMenuButton').addEventListener('click', function() {
+            document.querySelector('.sidebar').classList.toggle('active');
+        });
+    </script>
+</body>
+</html>
