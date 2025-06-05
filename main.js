@@ -10,13 +10,13 @@ import {
 
 // ✅ Replace this with your Firebase project config
 const firebaseConfig = {
-  apiKey: "AIzaSyA-IezE4A_aXsBVle40HpHGzJilIk3otng",
-  authDomain: "soft-dev-77c05.firebaseapp.com",
-  projectId: "soft-dev-77c05",
-  storageBucket: "soft-dev-77c05.firebasestorage.app",
-  messagingSenderId: "436570457834",
-  appId: "1:436570457834:web:ae85fa97bc1512062c3993",
-  measurementId: "G-RPW44ZWE52"
+  apiKey: "AIzaSyB1ZhQgkmXgvUuFQoDby1XcbtYAZ0EmmZo",
+  authDomain: "softdev-auth-fix.firebaseapp.com",
+  projectId: "softdev-auth-fix",
+  storageBucket: "softdev-auth-fix.firebasestorage.app",
+  messagingSenderId: "605532915107",
+  appId: "1:605532915107:web:7e3b00e28eff0ef7e64616",
+  measurementId: "G-QJDK807CEN"
 };
 
 const app = initializeApp(firebaseConfig);
