@@ -798,16 +798,7 @@
         </div>
     </footer>
     <script>
-        // Firebase configuration and initialization
-      const firebaseConfig = {
-  apiKey: "AIzaSyB1ZhQgkmXgvUuFQoDby1XcbtYAZ0EmmZo",
-  authDomain: "softdev-auth-fix.firebaseapp.com",
-  projectId: "softdev-auth-fix",
-  storageBucket: "softdev-auth-fix.firebasestorage.app",
-  messagingSenderId: "605532915107",
-  appId: "1:605532915107:web:7e3b00e28eff0ef7e64616",
-  measurementId: "G-QJDK807CEN"
-};
+   
 
         // Initialize Firebase
         firebase.initializeApp(firebaseConfig);
@@ -873,34 +864,32 @@
             }
         }
 
-        // Firebase Authentication Functions
-        document.getElementById('loginForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            const email = document.getElementById('loginEmail').value;
-            const password = document.getElementById('loginPassword').value;
-            
-            auth.signInWithEmailAndPassword(email, password)
-                .then((userCredential) => {
-                    // Signed in
-                    const user = userCredential.user;
-                    console.log('User logged in:', user);
-                    alert('Login successful!');
-                    closeAuthModal();
-                    
-                    // Store user data in localStorage
-                    localStorage.setItem('softDevUser', JSON.stringify({
-                        uid: user.uid,
-                        email: user.email,
-                        displayName: user.displayName || email.split('@')[0]
-                    }));
-                })
-                .catch((error) => {
-                    const errorCode = error.code;
-                    const errorMessage = error.message;
-                    console.error('Login error:', errorCode, errorMessage);
-                    alert('Login failed: ' + errorMessage);
-                });
+       document.getElementById('loginForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    const email = document.getElementById('loginEmail').value;
+    const password = document.getElementById('loginPassword').value;
+    
+    signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            const user = userCredential.user;
+            console.log('User logged in:', user);
+            alert('Login successful!');
+            closeAuthModal();
+
+            const displayName = user.displayName || email.split('@')[0];
+
+            // ✅ Save to localStorage and update UI
+            saveUserFromManualLogin(displayName, email);  // <-- This is the important part
+
+        })
+        .catch((error) => {
+            const errorCode = error.code;
+            const errorMessage = error.message;
+            console.error('Login error:', errorCode, errorMessage);
+            alert('Login failed: ' + errorMessage);
         });
+});
+
 
         document.getElementById('registerForm').addEventListener('submit', function(e) {
             e.preventDefault();
@@ -933,11 +922,13 @@
                         closeAuthModal();
                         
                         // Store user data in localStorage
-                        localStorage.setItem('softDevUser', JSON.stringify({
-                            uid: user.uid,
-                            email: user.email,
-                            displayName: name
+                      localStorage.setItem("softDevUser", JSON.stringify({
+                          name: name,
+                          email: user.email,
+                          picture: "",
+                          enrolled: false
                         }));
+
                     });
                 })
                 .catch((error) => {
