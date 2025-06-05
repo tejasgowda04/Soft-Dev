@@ -83,3 +83,82 @@ onAuthStateChanged(auth, (user) => {
     updateUI(localUser);
   }
 });
+window.addEventListener("DOMContentLoaded", () => {
+  const localUser = JSON.parse(localStorage.getItem("softDevUser"));
+  if (localUser) updateUI(localUser);
+});
+
+// ✅ Save user from manual login/registration and update UI
+window.saveUserFromManualLogin = function (name, email) {
+  const userData = {
+    name: name,
+    email: email,
+    picture: "",
+    enrolled: false
+  };
+  localStorage.setItem("softDevUser", JSON.stringify(userData));
+  updateUI(userData);
+};
+
+// Process Razorpay Payment (called on "Proceed to Payment" button click)
+window.processPayment = function (e) {
+  e.preventDefault();
+
+  const amount = document.getElementById('courseAmount').value;
+  const courseName = document.getElementById('courseName').value;
+  const name = document.getElementById('name').value;
+  const email = document.getElementById('email').value;
+  const phone = document.getElementById('phone').value;
+
+  const localUser = JSON.parse(localStorage.getItem("softDevUser")) || {};
+
+  if (!localUser.name && !localUser.email) {
+    alert("Please login before making a payment");
+    return;
+  }
+
+  const options = {
+    "key": "rzp_test_1DP5mmOlF5G5ag", // Replace this with your real Razorpay key when going live
+    "amount": parseInt(amount) * 100,
+    "currency": "INR",
+    "name": "SOFT.dev",
+    "description": courseName,
+    "handler": function (response) {
+      // ✅ Mark user as enrolled
+      localUser.enrolled = true;
+      localStorage.setItem("softDevUser", JSON.stringify(localUser));
+      updateUI(localUser);
+
+      // ✅ Redirect to course dashboard
+      window.location.href = `dashboard.html?course=${getCourseId(courseName)}`;
+    },
+    "prefill": {
+      "name": name,
+      "email": email,
+      "contact": phone
+    },
+    "theme": {
+      "color": "#4f46e5"
+    }
+  };
+
+  const rzp = new Razorpay(options);
+  rzp.open();
+};
+
+// Helper: Map course names to ID
+function getCourseId(courseName) {
+  const courses = {
+    "AI & Machine Learning Masterclass": "ai-ml",
+    "Full Stack Web Development": "fullstack",
+    "Data Science & Analytics": "data-science",
+    "Frontend Development": "frontend"
+  };
+  return courses[courseName] || 'fullstack';
+}
+
+if (!localUser.name && !localUser.email) {
+  alert("Please login before making a payment");
+  return;
+}
+
